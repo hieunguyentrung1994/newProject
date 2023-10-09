@@ -1,4 +1,4 @@
-import style from "./register/registerStyle.css";
+import style from "../asset/css/registerStyle.css";
 import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate, Link } from "react-router-dom";
@@ -24,11 +24,15 @@ const RegisterForm = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post(
-      "http://localhost:8888/api/v4/auth/verification",
-      userformAccuracy
-    );
-    navigate("/");
+    try {
+      await axios.post(
+        "http://localhost:8888/api/v4/auth/verification",
+        userformAccuracy
+      );
+      navigate("/login");
+    } catch (error) {
+      alert(error.response.data);
+    }
   };
   return (
     <div>

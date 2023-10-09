@@ -1,6 +1,5 @@
-import style from "./style.css";
+import style from "../../asset/css/loginstyle.css";
 import React, { useState, useEffect } from "react";
-import { userLogin } from "../../service/Userservice";
 import { toast } from "react-hot-toast";
 import { useCookies } from "react-cookie";
 import { useNavigate, Link } from "react-router-dom";
@@ -30,15 +29,33 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       await axios
-      .post("http://localhost:8888/api/v4/auth/sign-in", userform)
-      .then((res) => {
-          localStorage.setItem("token", res.data.token);
+        .post("http://localhost:8888/api/v4/auth/sign-in", userform)
+        .then((res) => {
+          if (res) {
+          let CookieExpired = Date.now() + 86400000;
+          setCookies("token", res.data.token,{
+            path:"/",
+            maxAge:CookieExpired,
+          });
+          setCookies("email", res.data.email,{
+            path:"/",
+            maxAge:CookieExpired,
+          });
+          setCookies("fullName", res.data.fullName,{
+            path:"/",
+            maxAge:CookieExpired,
+          });
+          setCookies("Roles", res.data.roles,{
+            path:"/",
+            maxAge:CookieExpired,
+          });
+          console.log(cookies);
           navigate("/");
-        })
-    }catch (error) {
-          alert("Invalid user name or password");
         }
-      };
+      });
+    } catch (error) {
+      alert(error.response.data.message);
+    }
   };
 
   return (

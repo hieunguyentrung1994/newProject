@@ -1,8 +1,7 @@
-import style from "./registerStyle.css";
+import style from "../../asset/css/registerStyle.css";
 import React, { useState, useEffect } from "react";
 import { userRegister } from "../../service/Userservice";
 import { toast } from "react-hot-toast";
-import { useCookies } from "react-cookie";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
@@ -15,7 +14,6 @@ const RegisterForm = () => {
     phone: "",
     fullName: "",
   });
-  const [cookies, setCookies] = useCookies();
   useEffect(() => {
     setTimeout(() => {
       setToggle(true);
@@ -27,9 +25,15 @@ const RegisterForm = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    await axios.post("http://localhost:8888/api/v4/auth/sign-up", userformSign);
-    navigate("/verifycation");
+    try {
+      await axios.post(
+        "http://localhost:8888/api/v4/auth/sign-up",
+        userformSign
+      );
+      navigate("/verification");
+    } catch (error) {
+      alert(error.response.data);
+    }
   };
   return (
     <div>
@@ -106,9 +110,9 @@ const RegisterForm = () => {
             <div className="social-login">
               <h3>Register via</h3>
               <div className="social-icons">
-                <a href="#" className="social-login__icon fab fa-instagram" />
-                <a href="#" className="social-login__icon fab fa-facebook" />
-                <a href="#" className="social-login__icon fab fa-twitter" />
+              
+                <Link to="/registerGoogle" className="social-login__icon fab fa-google" />
+                <Link to="/registerFabook" className="social-login__icon fab fa-facebook" />       
               </div>
             </div>
           </div>
